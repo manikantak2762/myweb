@@ -18,5 +18,11 @@ pipeline{
                 sh "mvn test"
             }
         }
+        stage("Build"){
+            steps{
+                sh "mvn package"
+                sh "mv target/*.war target/myweb.war"
+            }
+        }
     }
 }
