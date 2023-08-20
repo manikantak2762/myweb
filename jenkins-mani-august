@@ -1,0 +1,12 @@
+pipeline{
+
+    anent any
+
+    stages{
+        stage("Git clone"){
+            steps{
+                git 'https://github.com/manikantak2762/myweb.git'
+            }
+        }
+    }
+}
