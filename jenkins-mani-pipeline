@@ -40,11 +40,11 @@ pipeline{
         stage("Tomcat"){
             steps{
                 sshagent(['tomcat-new']){
-                    sh "scp -o StrictHostKeyChecking=no **/*.war  ec2-user@172.31.41.203:/home/ec2-user/apache-tomcat-9.0.78/webapps"
+                    sh "scp -o StrictHostKeyChecking=no **/*.war  ec2-user@172.31.47.76:/home/ec2-user/apache-tomcat-9.0.78/webapps"
                     
-                    sh "ssh ec2-user@172.31.41.203 /home/ec2-user/apache-tomcat-9.0.78/bin/shutdown.sh"
+                    sh "ssh ec2-user@172.31.47.76 /home/ec2-user/apache-tomcat-9.0.78/bin/shutdown.sh"
                     
-                    sh "ssh ec2-user@172.31.41.203 /home/ec2-user/apache-tomcat-9.0.78/bin/startup.sh"
+                    sh "ssh ec2-user@172.31.47.76 /home/ec2-user/apache-tomcat-9.0.78/bin/startup.sh"
                 }
             }
         }
