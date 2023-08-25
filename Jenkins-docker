@@ -14,7 +14,7 @@ pipeline{
             steps{
                 sh "mvn clean sonar:sonar package"
             }
-        }   /* 
+        }   
         stage('Upload War To Nexus'){
             steps{
                   nexusArtifactUploader artifacts: [
@@ -48,7 +48,7 @@ pipeline{
             }
             sh 'docker push manik2762/dev'
         }
-      } */
+      } 
         
         
     }
