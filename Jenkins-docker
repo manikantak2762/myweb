@@ -1,14 +1,8 @@
 pipeline{
     agent any
-    /*
-    tools {
-        maven 'Maven-3.6.1'
-    }
     
-    environment{
-        PATH = "/opt/maven3/bin:$PATH"
-    }
-    */
+  
+    
     stages{
         stage("Git Checkout"){
             steps{
@@ -18,11 +12,11 @@ pipeline{
         stage("Maven Build"){
             steps{
                 sh "mvn clean"
-                // sh "mvn sonar:sonar"
+                sh "mvn sonar:sonar"
                 sh "mvn package"
                 
             }
-        }   /*
+        }   
         stage('Upload War To Nexus'){
             steps{
                   nexusArtifactUploader artifacts: [
@@ -57,7 +51,7 @@ pipeline{
             sh 'docker push manik2762/dev'
         }
       }
-        */
+        
         
     }
 }
