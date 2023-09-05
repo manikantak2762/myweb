@@ -1,0 +1,50 @@
+pipeline{
+
+    agent any
+
+    stages{
+        stage("Git clone"){
+            steps{
+                git 'https://github.com/manikantak2762/myweb.git'
+            }
+        }
+        stage("clean"){
+            steps{
+                sh "mvn clean"
+            }
+        }
+        stage("Test"){
+            steps{
+                sh "mvn test"
+            }
+        }
+        stage("Buils"){
+            steps{
+                sh "mvn package"
+                sh "mv target/*.war target/myweb.war"
+            }
+        }
+        stage("Sonar"){
+            steps{
+                sh "mvn sonar:sonar"
+            }
+        }
+        stage("Nexus"){
+            steps{
+                sh "mvn deploy"
+            }
+        }
+        stage("Tomcat"){
+            steps{
+                sshagent(['tomcat-new']){
+                sh "scp -o StrictHostKeyChecking=no **/*.war  ec2-user@172.31.43.225:/home/ec2-user/apache-tomcat-9.0.78/webapps"
+                    
+                sh "ssh ec2-user@172.31.43.225 /home/ec2-user/apache-tomcat-9.0.78/bin/shutdown.sh"
+                    
+                sh "ssh ec2-user@172.31.43.225 /home/ec2-user/apache-tomcat-9.0.78/bin/startup.sh"
+
+                }
+            }
+        }
+    }
+}

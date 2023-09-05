@@ -1,0 +1,51 @@
+pipeline{
+
+    agent any
+
+    triggers {pollSCM 'H/10 * * * *'}
+
+    stages{
+        stage("Git clone"){
+            steps{
+                git 'https://github.com/manikantak2762/myweb.git'
+            }
+        }    
+        stage("Clean"){
+            steps{
+                sh "mvn clean"
+            }
+        }
+        stage("Test"){
+            steps{
+                sh "mvn test"
+            }
+        }     
+        stage("Artifact"){
+            steps{
+                sh "mvn package"
+                sh "mv target/*.war target/myweb.war"
+            }
+        } 
+        stage("Sonar"){
+            steps{
+                sh "mvn sonar:sonar"
+            }
+        }
+        stage("nexus"){
+            steps{
+                sh "mvn deploy"
+            }
+        }
+        stage(Tomcat){
+            steps{
+                sshagent(['tomcat-new']){
+                    sh "scp -o StrictHostKeyChecking=no **/*.war  ec2-user@172.31.37.2:/home/ec2-user/apache-tomcat-9.0.78/webapps"
+                    
+                    sh "ssh ec2-user@172.31.37.2 /home/ec2-user/apache-tomcat-9.0.78/bin/shutdown.sh"
+                    
+                    sh "ssh ec2-user@172.31.37.2 /home/ec2-user/apache-tomcat-9.0.78/bin/startup.sh"
+                }
+            }  
+        }   
+    }
+}
