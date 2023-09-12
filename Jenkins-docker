@@ -38,7 +38,7 @@ pipeline{
             steps{
                  sh 'docker build -t manik2762/master .'
                  sh 'docker build -t tomcat:${BUILD_NUMBER} .'
-                 sh 'docker run -itd --name buildcontainer1 -p 3802:8080 tomcat:${BUILD_NUMBER}'
+                 sh 'docker run -itd --name buildcontainerdocker -p 3802:8080 tomcat:${BUILD_NUMBER}'
              }
          }
         stage('Push Docker Image'){
